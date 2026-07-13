@@ -31,7 +31,7 @@ export async function GET() {
 // POST: Submit a new RSVP (from Invitation Flow)
 export async function POST(request: Request) {
   try {
-    const body = await request.json()
+    const body = (await request.json()) as any
     const newRsvp = {
       name: body.name || 'Anonymous',
       status: body.status || 'Unknown', // YES or NO
