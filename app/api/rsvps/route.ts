@@ -1,25 +1,29 @@
 import { NextResponse } from 'next/server'
-import fs from 'fs'
-import path from 'path'
+import clientPromise from '~/libs/mongodb'
 
-// Define the path to our local JSON database
-const DATA_FILE = path.join(process.cwd(), 'data', 'rsvps.json')
-
-// Helper to read the current data
-function getRsvps() {
-  if (!fs.existsSync(DATA_FILE)) {
-    return []
-  }
-  const data = fs.readFileSync(DATA_FILE, 'utf8')
-  return data ? JSON.parse(data) : []
-}
+// The collection name
+const COLLECTION_NAME = 'rsvps'
 
 // GET: Fetch all RSVPs (for Admin Dashboard)
 export async function GET() {
   try {
-    const rsvps = getRsvps()
-    return NextResponse.json(rsvps)
+    const client = await clientPromise
+    const db = client.db(process.env.MONGODB_DB)
+    const collection = db.collection(COLLECTION_NAME)
+    
+    // Fetch all documents from the collection
+    const rsvps = await collection.find({}).toArray()
+    
+    // Map _id to id to match the expected format
+    const formattedRsvps = rsvps.map(rsvp => ({
+      ...rsvp,
+      id: rsvp._id.toString(),
+      _id: undefined
+    }))
+
+    return NextResponse.json(formattedRsvps)
   } catch (error) {
+    console.error("Database Error:", error)
     return NextResponse.json({ error: 'Failed to read data' }, { status: 500 })
   }
 }
@@ -29,26 +33,25 @@ export async function POST(request: Request) {
   try {
     const body = await request.json()
     const newRsvp = {
-      id: Date.now().toString(),
       name: body.name || 'Anonymous',
       status: body.status || 'Unknown', // YES or NO
       note: body.note || '',
       timestamp: new Date().toISOString(),
     }
 
-    const rsvps = getRsvps()
-    rsvps.push(newRsvp)
+    const client = await clientPromise
+    const db = client.db(process.env.MONGODB_DB)
+    const collection = db.collection(COLLECTION_NAME)
 
-    // Ensure the data directory exists
-    const dir = path.dirname(DATA_FILE)
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true })
-    }
+    // Insert the new RSVP
+    const result = await collection.insertOne(newRsvp)
 
-    fs.writeFileSync(DATA_FILE, JSON.stringify(rsvps, null, 2))
-
-    return NextResponse.json({ success: true, data: newRsvp })
+    return NextResponse.json({ 
+      success: true, 
+      data: { ...newRsvp, id: result.insertedId.toString() } 
+    })
   } catch (error) {
+    console.error("Database Error:", error)
     return NextResponse.json({ error: 'Failed to save data' }, { status: 500 })
   }
 }

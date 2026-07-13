@@ -2,6 +2,9 @@ import * as config from '../config'
 import { generateRoot } from './generate-root'
 import { generateScale } from './generate-scale'
 import { generateTailwind } from './generate-tailwind'
+import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
 
 const tailwind = generateTailwind(config)
 const root = generateRoot(config)
@@ -15,14 +18,16 @@ const banner = `/*
 const tailwindcss = [banner, tailwind, scale]
 const rootcss = [banner, root]
 
-const cssDir = new URL('../css', import.meta.url).pathname
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const cssDir = path.resolve(__dirname, '../css')
 
-await Bun.write(`${cssDir}/tailwind.css`, tailwindcss.join('\n\n'))
-await Bun.write(`${cssDir}/root.css`, rootcss.join('\n\n'))
+// Ensure the directory exists
+if (!fs.existsSync(cssDir)) {
+  fs.mkdirSync(cssDir, { recursive: true })
+}
 
-console.log(
-  Bun.color('green', 'ansi'),
-  '✓',
-  Bun.color('black', 'ansi'),
-  'Style config generated successfully'
-)
+fs.writeFileSync(path.join(cssDir, 'tailwind.css'), tailwindcss.join('\n\n'))
+fs.writeFileSync(path.join(cssDir, 'root.css'), rootcss.join('\n\n'))
+
+console.log('✓ Style config generated successfully')

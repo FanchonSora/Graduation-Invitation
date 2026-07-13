@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 
 type RSVP = {
   id: string
@@ -19,25 +19,27 @@ export function AdminDashboard() {
     fetch('/api/rsvps')
       .then((res) => {
         if (!res.ok) throw new Error('Failed to fetch data')
-        return res.json()
+        return res.json() as Promise<RSVP[]>
       })
       .then((data) => {
         setRsvps(data)
         setLoading(false)
       })
-      .catch((err) => {
-        setError(err.message)
+      .catch((err: unknown) => {
+        setError(err instanceof Error ? err.message : 'Unknown error')
         setLoading(false)
       })
   }, [])
 
-  const handleExportCSV = () => {
-    if (rsvps.length === 0) {
-      alert("No data to export.")
-      return
-    }
+  const stats = useMemo(() => ({
+    total: rsvps.length,
+    yes: rsvps.filter((r) => r.status === 'YES').length,
+    no: rsvps.filter((r) => r.status === 'NO').length,
+  }), [rsvps])
 
-    // Prepare CSV header and rows
+  const handleExportCSV = () => {
+    if (rsvps.length === 0) return
+
     const headers = ['Name', 'Status', 'Note', 'Timestamp']
     const rows = rsvps.map((rsvp) => [
       `"${rsvp.name.replace(/"/g, '""')}"`,
@@ -46,77 +48,131 @@ export function AdminDashboard() {
       `"${new Date(rsvp.timestamp).toLocaleString()}"`,
     ])
 
-    const csvContent = [headers.join(','), ...rows.map(row => row.join(','))].join('\n')
-
-    // Create a Blob and download it
+    const csvContent = [headers.join(','), ...rows.map((row) => row.join(','))].join('\n')
     const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' })
     const link = document.createElement('a')
-    const url = URL.createObjectURL(blob)
-    link.setAttribute('href', url)
-    link.setAttribute('download', 'graduation_rsvps.csv')
-    link.style.visibility = 'hidden'
-    document.body.appendChild(link)
+    link.href = URL.createObjectURL(blob)
+    link.download = 'graduation_rsvps.csv'
     link.click()
-    document.body.removeChild(link)
+    URL.revokeObjectURL(link.href)
   }
 
   return (
-    <div className="min-h-[100dvh] w-full bg-purple-50 p-6 md:p-12 font-sans text-indigo-950 relative overflow-hidden">
-      
-      {/* Decorative Orbs */}
-      <div className="absolute top-0 left-0 w-full h-96 bg-gradient-to-b from-purple-200/50 to-transparent pointer-events-none"></div>
-
-      <div className="max-w-5xl mx-auto bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-purple-100 overflow-hidden relative z-10">
-        
-        {/* Header */}
-        <div className="bg-gradient-to-r from-indigo-900 via-purple-900 to-fuchsia-900 p-6 text-white flex flex-col sm:flex-row justify-between items-center gap-4 border-b border-purple-800">
-          <div>
-            <h1 className="text-2xl font-bold font-serif tracking-wide">Admin Dashboard</h1>
-            <p className="text-purple-200 text-sm mt-1">Manage and view your RSVPs</p>
+    <div className="admin-scene">
+      <div className="admin-card">
+        <div className="admin-header">
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
+            <div>
+              <h1 style={{ fontFamily: 'var(--next-font-chalmers)', fontSize: 'clamp(1.25rem, 4vw, 1.75rem)', letterSpacing: '0.02em' }}>
+                Admin Dashboard
+              </h1>
+              <p style={{ opacity: 0.7, fontSize: '0.8125rem', marginTop: '0.25rem' }}>
+                Manage and view your RSVPs
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={handleExportCSV}
+              disabled={rsvps.length === 0}
+              className="inv-btn inv-btn--secondary"
+              style={{ width: 'auto', minHeight: '2.5rem', padding: '0.5rem 1.25rem', fontSize: '0.8125rem', color: 'var(--inv-cream)', borderColor: 'oklch(1 0 0 / 0.2)' }}
+            >
+              📥 Export CSV
+            </button>
           </div>
-          <button 
-            onClick={handleExportCSV}
-            className="bg-white/10 hover:bg-white/20 border border-white/30 text-white px-5 py-2 rounded-xl font-semibold transition-all flex items-center gap-2 shadow-lg hover:shadow-purple-500/30"
-          >
-            <span>📥</span> Export to Excel (CSV)
-          </button>
+
+          {!loading && !error && rsvps.length > 0 && (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem', marginTop: '1.25rem' }}>
+              <div className="admin-stat" style={{ background: 'oklch(1 0 0 / 0.1)', border: '1px solid oklch(1 0 0 / 0.15)' }}>
+                <span style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--inv-accent)' }}>{stats.total}</span>
+                <span style={{ fontSize: '0.6875rem', opacity: 0.7, marginTop: '0.25rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Total</span>
+              </div>
+              <div className="admin-stat" style={{ background: 'oklch(1 0 0 / 0.1)', border: '1px solid oklch(1 0 0 / 0.15)' }}>
+                <span style={{ fontSize: '1.5rem', fontWeight: 700, color: 'oklch(0.75 0.15 145)' }}>{stats.yes}</span>
+                <span style={{ fontSize: '0.6875rem', opacity: 0.7, marginTop: '0.25rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Attending</span>
+              </div>
+              <div className="admin-stat" style={{ background: 'oklch(1 0 0 / 0.1)', border: '1px solid oklch(1 0 0 / 0.15)' }}>
+                <span style={{ fontSize: '1.5rem', fontWeight: 700, color: 'oklch(0.7 0.12 25)' }}>{stats.no}</span>
+                <span style={{ fontSize: '0.6875rem', opacity: 0.7, marginTop: '0.25rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Declined</span>
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Content */}
-        <div className="p-6">
+        <div style={{ padding: 'clamp(1rem, 4vw, 1.5rem)' }}>
           {loading ? (
-            <div className="text-center py-10 text-purple-500 animate-pulse font-medium">Loading data...</div>
+            <div style={{ textAlign: 'center', padding: '3rem 0', color: 'oklch(0.5 0.08 300)' }}>
+              <div className="inv-spinner" style={{ width: '2rem', height: '2rem', margin: '0 auto 1rem' }} />
+              Loading RSVPs...
+            </div>
           ) : error ? (
-            <div className="text-center py-10 text-red-500 bg-red-50 rounded-xl border border-red-100 font-medium">Error: {error}</div>
+            <div
+              style={{
+                textAlign: 'center',
+                padding: '2rem',
+                color: 'oklch(0.5 0.15 25)',
+                background: 'oklch(0.95 0.03 25 / 0.3)',
+                borderRadius: 'var(--inv-radius-sm)',
+                border: '1px solid oklch(0.85 0.05 25 / 0.3)',
+              }}
+            >
+              Error: {error}
+            </div>
           ) : rsvps.length === 0 ? (
-            <div className="text-center py-12 text-purple-600 bg-purple-50/50 rounded-xl border border-purple-100 font-medium">
-              No one has RSVP'd yet.
+            <div
+              style={{
+                textAlign: 'center',
+                padding: '3rem 1rem',
+                color: 'oklch(0.5 0.08 300)',
+                background: 'oklch(0.97 0.02 300 / 0.5)',
+                borderRadius: 'var(--inv-radius-sm)',
+                border: '1px solid oklch(0.9 0.02 300 / 0.3)',
+              }}
+            >
+              <span style={{ fontSize: '2rem', display: 'block', marginBottom: '0.75rem' }}>📭</span>
+              No RSVPs yet. Share your invitation link!
             </div>
           ) : (
-            <div className="overflow-x-auto rounded-xl border border-purple-100">
-              <table className="w-full text-left border-collapse">
+            <div className="admin-table-wrap">
+              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                 <thead>
-                  <tr className="bg-purple-50/80 text-purple-900 text-sm uppercase tracking-wide border-b border-purple-200">
-                    <th className="px-4 py-4 font-semibold">Name</th>
-                    <th className="px-4 py-4 font-semibold">Status</th>
-                    <th className="px-4 py-4 font-semibold">Note</th>
-                    <th className="px-4 py-4 font-semibold">Time</th>
+                  <tr style={{ background: 'oklch(0.96 0.02 300 / 0.6)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'oklch(0.4 0.06 300)' }}>
+                    <th style={{ padding: '0.875rem 1rem', fontWeight: 600 }}>Name</th>
+                    <th style={{ padding: '0.875rem 1rem', fontWeight: 600 }}>Status</th>
+                    <th style={{ padding: '0.875rem 1rem', fontWeight: 600 }}>Note</th>
+                    <th style={{ padding: '0.875rem 1rem', fontWeight: 600 }}>Time</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-purple-100">
+                <tbody>
                   {rsvps.map((rsvp) => (
-                    <tr key={rsvp.id} className="hover:bg-purple-50/80 transition-colors">
-                      <td className="px-4 py-4 font-medium whitespace-nowrap text-indigo-950">{rsvp.name}</td>
-                      <td className="px-4 py-4">
-                        <span className={cn(
-                          "px-3 py-1 text-xs font-bold rounded-full shadow-sm",
-                          rsvp.status === 'YES' ? "bg-fuchsia-100 text-fuchsia-700 border border-fuchsia-200" : "bg-indigo-100 text-indigo-700 border border-indigo-200"
-                        )}>
+                    <tr
+                      key={rsvp.id}
+                      style={{ borderTop: '1px solid oklch(0.92 0.02 300 / 0.5)', transition: 'background 0.15s' }}
+                      onMouseEnter={(e) => { e.currentTarget.style.background = 'oklch(0.97 0.02 300 / 0.4)' }}
+                      onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent' }}
+                    >
+                      <td style={{ padding: '0.875rem 1rem', fontWeight: 500, whiteSpace: 'nowrap' }}>{rsvp.name}</td>
+                      <td style={{ padding: '0.875rem 1rem' }}>
+                        <span
+                          style={{
+                            display: 'inline-block',
+                            padding: '0.25rem 0.75rem',
+                            fontSize: '0.6875rem',
+                            fontWeight: 700,
+                            borderRadius: '9999px',
+                            border: '1px solid',
+                            ...(rsvp.status === 'YES'
+                              ? { background: 'oklch(0.93 0.05 320)', color: 'oklch(0.45 0.15 320)', borderColor: 'oklch(0.85 0.08 320)' }
+                              : { background: 'oklch(0.93 0.04 280)', color: 'oklch(0.4 0.1 280)', borderColor: 'oklch(0.85 0.06 280)' }),
+                          }}
+                        >
                           {rsvp.status}
                         </span>
                       </td>
-                      <td className="px-4 py-4 min-w-[200px] text-purple-900/80 leading-relaxed">{rsvp.note || '-'}</td>
-                      <td className="px-4 py-4 text-sm text-purple-500 whitespace-nowrap">
+                      <td style={{ padding: '0.875rem 1rem', minWidth: '10rem', lineHeight: 1.5, color: 'oklch(0.35 0.04 300)' }}>
+                        {rsvp.note || '—'}
+                      </td>
+                      <td style={{ padding: '0.875rem 1rem', fontSize: '0.8125rem', color: 'oklch(0.5 0.06 300)', whiteSpace: 'nowrap' }}>
                         {new Date(rsvp.timestamp).toLocaleString()}
                       </td>
                     </tr>
@@ -129,8 +185,4 @@ export function AdminDashboard() {
       </div>
     </div>
   )
-}
-
-function cn(...classes: (string | undefined | null | false)[]) {
-  return classes.filter(Boolean).join(' ')
 }
