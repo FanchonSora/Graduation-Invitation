@@ -3,7 +3,6 @@ import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  reactCompiler: true,
   poweredByHeader: false,
   productionBrowserSourceMaps:
     process.env.SOURCE_MAPS === 'true' && typeof Bun === 'undefined',
@@ -17,10 +16,8 @@ const nextConfig: NextConfig = {
         : false,
     reactRemoveProperties: true,
   },
-  cacheComponents: true,
   compress: true,
   experimental: {
-    turbopackFileSystemCacheForDev: true,
     clientSegmentCache: true,
     taint: true,
     browserDebugInfoInTerminal: true,
