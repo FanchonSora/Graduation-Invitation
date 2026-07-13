@@ -40,7 +40,7 @@ export function AdminDashboard() {
   const handleExportCSV = () => {
     if (rsvps.length === 0) return
 
-    const headers = ['Name', 'Status', 'Note', 'Timestamp']
+    const headers = ['Tên', 'Đi Được Hay Không', 'Ghi Chú', 'Thời Gian']
     const rows = rsvps.map((rsvp) => [
       `"${rsvp.name.replace(/"/g, '""')}"`,
       `"${rsvp.status}"`,
@@ -137,10 +137,10 @@ export function AdminDashboard() {
               <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                 <thead>
                   <tr style={{ background: 'oklch(0.96 0.02 300 / 0.6)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'oklch(0.4 0.06 300)' }}>
-                    <th style={{ padding: '0.875rem 1rem', fontWeight: 600 }}>Name</th>
-                    <th style={{ padding: '0.875rem 1rem', fontWeight: 600 }}>Status</th>
-                    <th style={{ padding: '0.875rem 1rem', fontWeight: 600 }}>Note</th>
-                    <th style={{ padding: '0.875rem 1rem', fontWeight: 600 }}>Time</th>
+                    <th style={{ padding: '0.875rem 1rem', fontWeight: 600 }}>Tên</th>
+                    <th style={{ padding: '0.875rem 1rem', fontWeight: 600 }}>Đi được hay không</th>
+                    <th style={{ padding: '0.875rem 1rem', fontWeight: 600 }}>Ghi Chú</th>
+                    <th style={{ padding: '0.875rem 1rem', fontWeight: 600 }}>Thời Gian</th>
                   </tr>
                 </thead>
                 <tbody>

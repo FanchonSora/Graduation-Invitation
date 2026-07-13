@@ -14,9 +14,12 @@ export function AccessGate({ onAccess }: AccessGateProps) {
 
   const handleAccess = (e: React.FormEvent) => {
     e.preventDefault()
-    if (accessCode === '1') {
+    const invPass = process.env.NEXT_PUBLIC_INVITATION_PASSWORD || '1'
+    const adminPass = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || '2'
+
+    if (accessCode === invPass) {
       onAccess('invitation')
-    } else if (accessCode === '2') {
+    } else if (accessCode === adminPass) {
       onAccess('admin')
     } else {
       setError(true)
