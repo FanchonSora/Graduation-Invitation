@@ -96,12 +96,7 @@ export function InvitationFlow() {
     }
   }
 
-  const resetFlow = () => {
-    setName('')
-    setStatus('')
-    setNote('')
-    animateStep('prev', () => setStep(0))
-  }
+
 
   const handleSubmit = async () => {
     if (!name.trim()) {
