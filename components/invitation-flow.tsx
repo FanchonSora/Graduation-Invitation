@@ -16,20 +16,20 @@ const STEPS = ['Welcome', 'Details', 'RSVP', 'Thank You'] as const
 const TOTAL_STEPS = STEPS.length
 
 const EVENT_DETAILS = [
-  { icon: '📅', label: 'Saturday, 04 April, 2026' },
-  { icon: '⏰', label: '10:30 – 12:00' },
+  { icon: '📅', label: 'Thứ sáu, 24/07/2026' },
+  { icon: '⏰', label: '16:00 - 18:00' },
   {
     icon: '📍',
-    label: 'UEH University – Campus A',
-    sub: '59C Nguyen Dinh Chieu Street, Ward Xuan Hoa, HCMC',
+    label: 'Trường Đại học Sư Phạm TP HCM',
+    sub: '280 An Dương Vương, Phường 4, Quận 5, TP HCM',
   },
   {
     icon: '📞',
     label: (
       <>
         Zalo:{' '}
-        <a href="tel:0833518316" className="inv-link">
-          0833 518 316
+        <a href="tel:0865251622" className="inv-link">
+          0865251622
         </a>
       </>
     ),
@@ -39,8 +39,8 @@ const EVENT_DETAILS = [
     label: (
       <>
         Facebook:{' '}
-        <a href="#" className="inv-link">
-          Phương Nhã
+        <a href="https://www.facebook.com/binh.laithuy.5" className="inv-link">
+          Lại Thuý Bình
         </a>
       </>
     ),
@@ -119,7 +119,7 @@ export function InvitationFlow() {
       })
       if (res.ok) {
         showToast('Note sent successfully! 💌')
-        setTimeout(resetFlow, 1500)
+        setTimeout(() => animateStep('next', () => setStep(4)), 1500)
       } else {
         showToast('Failed to send. Please try again.', 'error')
       }
@@ -133,70 +133,37 @@ export function InvitationFlow() {
   return (
     <BackgroundScene>
       <div className="inv-card" ref={containerRef}>
-        <div className="inv-card__header">
-          <ProgressSteps total={TOTAL_STEPS} current={step} />
-          <p
-            className="inv-body"
-            style={{
-              textAlign: 'center',
-              fontSize: '0.6875rem',
-              letterSpacing: '0.15em',
-              textTransform: 'uppercase',
-              marginTop: '0.75rem',
-              opacity: 0.5,
-            }}
-          >
-            {STEPS[step]}
-          </p>
-        </div>
+        {step < 4 && (
+          <div className="inv-card__header">
+            <ProgressSteps total={TOTAL_STEPS} current={step} />
+            <p
+              className="inv-body"
+              style={{
+                textAlign: 'center',
+                fontSize: '0.6875rem',
+                letterSpacing: '0.15em',
+                textTransform: 'uppercase',
+                marginTop: '0.75rem',
+                opacity: 0.5,
+              }}
+            >
+              {STEPS[step]}
+            </p>
+          </div>
+        )}
 
         {/* Step 0: Welcome */}
         {step === 0 && (
           <>
             <div className="inv-card__body" style={{ gap: '1.25rem' }}>
-              <div
-                style={{
-                  position: 'relative',
-                  borderRadius: 'var(--inv-radius-sm)',
-                  overflow: 'hidden',
-                  border: '1px solid var(--inv-glass-border)',
-                }}
-              >
-                <Image
-                  src="/SE170317-2.png"
-                  alt="Graduation invitation card"
-                  width={800}
-                  height={600}
-                  priority
-                  style={{ width: '100%', height: 'auto', display: 'block', objectFit: 'cover' }}
-                />
-                <div
-                  style={{
-                    position: 'absolute',
-                    inset: 0,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'flex-end',
-                    paddingBottom: '1rem',
-                    background: 'linear-gradient(to top, oklch(0.15 0.04 280 / 0.85) 0%, transparent 60%)',
-                  }}
-                >
-                  <span className="inv-title" style={{ fontSize: '1.25rem', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
-                    Graduation
-                  </span>
-                  <span style={{ fontFamily: 'var(--next-font-chalmers)', fontSize: '1.5rem', color: 'var(--inv-accent)', letterSpacing: '0.3em' }}>
-                    2026
-                  </span>
-                </div>
-              </div>
-
               <div style={{ textAlign: 'center' }}>
-                <h1 className="inv-title inv-title--gradient" style={{ fontSize: 'clamp(1.5rem, 5vw, 2rem)', marginBottom: '0.75rem' }}>
-                  Hellooooo 😚💖
-                </h1>
-                <p className="inv-body" style={{ fontSize: 'clamp(0.875rem, 2.5vw, 1rem)' }}>
-                  After a long journey of hard work and growth, I&apos;m so happy to share that I&apos;ve officially GRADUATED 🎓✨
+                <h1 className="inv-title inv-title--gradient" style={{ fontSize: 'clamp(2rem, 5vw, 2rem)', marginBottom: '0.75rem' }}>
+                  Helloooooooo !!! 
+                </h1> 
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <p className="inv-body" style={{ fontSize: 'clamp(3rem, 10vw, 2rem)' }}>
+                  Hớ hớ sau bao ngày tháng quằn quại thì em Bình cũng đã tốt nghiệp roài nè ạaa 🎓💖
                 </p>
               </div>
             </div>
@@ -263,9 +230,13 @@ export function InvitationFlow() {
           <>
             <div className="inv-card__body" style={{ gap: '1.5rem', justifyContent: 'center' }}>
               <h2 className="inv-title inv-title--gradient" style={{ fontSize: 'clamp(1.25rem, 4.5vw, 1.875rem)', textAlign: 'center' }}>
-                Will you be part of my happy day? ✨
+                Bạn có thể tới chung vui với tui được hemm 
               </h2>
-
+              <div style={{ textAlign: 'center' }}>
+                <p style={{ fontSize: 'clamp(2.5rem, 3vw, 1.25rem)' }}>
+                  🥺💝
+                </p>
+              </div>  
               <input
                 type="text"
                 value={name}
@@ -282,7 +253,7 @@ export function InvitationFlow() {
                   className="inv-btn inv-btn--accent"
                   style={{ fontSize: 'clamp(1rem, 3vw, 1.25rem)', minHeight: '3.5rem' }}
                 >
-                  YES, I&apos;ll be there! 🎉
+                  YASS TẤT NHIÊN ROÀI !!
                 </button>
                 <button
                   type="button"
@@ -290,7 +261,7 @@ export function InvitationFlow() {
                   className="inv-btn inv-btn--secondary"
                   style={{ fontSize: 'clamp(1rem, 3vw, 1.25rem)', minHeight: '3.5rem' }}
                 >
-                  Sorry, I can&apos;t make it
+                  Ố NÔ TUI BẬN MẤT ROÀI
                 </button>
               </div>
             </div>
@@ -308,13 +279,8 @@ export function InvitationFlow() {
             <div className="inv-card__body" style={{ gap: '1.25rem' }}>
               <div style={{ textAlign: 'center' }}>
                 <h2 className="inv-title inv-title--gradient" style={{ fontSize: 'clamp(1.125rem, 4vw, 1.5rem)' }}>
-                  {status === 'YES'
-                    ? `Awww. Thank you. See you there, ${name || 'Guest'} 💜`
-                    : `Thank you for letting me know, ${name || 'Guest'} 💜`}
+                  1 vài đìu dễ thươn muốn nói với Bỉnhhh
                 </h2>
-                <p className="inv-body" style={{ marginTop: '0.5rem', fontSize: '0.875rem' }}>
-                  Feel free to leave a little note for NP 💌
-                </p>
               </div>
 
               <textarea
@@ -341,17 +307,21 @@ export function InvitationFlow() {
                 </p>
                 <p className="inv-body" style={{ fontSize: '0.8125rem' }}>
                   📞 Zalo:{' '}
-                  <a href="tel:0833518316" className="inv-link">0833 518 316</a>
+                  <a href="tel:0865251622" className="inv-link">0865251622</a>
                 </p>
                 <p className="inv-body" style={{ fontSize: '0.8125rem' }}>
                   🔗 Facebook:{' '}
-                  <a href="#" className="inv-link">Phương Nhã</a>
+                  <a href="https://www.facebook.com/binh.laithuy.5" className="inv-link">Lại Thuý Bình</a>
                 </p>
               </div>
             </div>
             <div className="inv-card__footer" style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
-              <button type="button" onClick={resetFlow} className="inv-btn inv-btn--secondary">
-                Close Invitation
+              <button 
+                type="button" 
+                onClick={() => animateStep('next', () => setStep(4))} 
+                className="inv-btn inv-btn--secondary"
+              >
+                Khôm muốn nói mún nhận thiệp cơ
               </button>
               <button
                 type="button"
@@ -363,6 +333,20 @@ export function InvitationFlow() {
               </button>
             </div>
           </>
+        )}
+
+        {/* Step 4: Final Poster */}
+        {step === 4 && (
+          <div className="inv-card__body" style={{ padding: '0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ position: 'relative', width: '100%', height: '100%', minHeight: '600px' }}>
+              <Image
+                src="/huh.jpg"
+                alt="Final Poster"
+                fill
+                style={{ objectFit: 'contain' }}
+              />
+            </div>
+          </div>
         )}
       </div>
 

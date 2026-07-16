@@ -1,18 +1,18 @@
 /* Invitation theme — elegant graduation aesthetic */
 
 :root {
-  --inv-bg-deep: oklch(0.15 0.04 280);
-  --inv-bg-mid: oklch(0.22 0.06 290);
-  --inv-accent: oklch(0.78 0.12 85);
-  --inv-accent-soft: oklch(0.78 0.12 85 / 0.15);
-  --inv-lavender: oklch(0.72 0.14 310);
-  --inv-lavender-soft: oklch(0.72 0.14 310 / 0.2);
-  --inv-cream: oklch(0.95 0.02 85);
-  --inv-cream-muted: oklch(0.85 0.03 85 / 0.7);
-  --inv-glass: oklch(1 0 0 / 0.06);
-  --inv-glass-border: oklch(1 0 0 / 0.12);
-  --inv-glass-hover: oklch(1 0 0 / 0.1);
-  --inv-shadow: 0 8px 32px oklch(0 0 0 / 0.35);
+  --inv-bg-deep: oklch(0.98 0.02 90);
+  --inv-bg-mid: oklch(0.99 0.01 95);
+  --inv-accent: oklch(0.45 0.12 250);
+  --inv-accent-soft: oklch(0.45 0.12 250 / 0.15);
+  --inv-lavender: oklch(0.55 0.08 240);
+  --inv-lavender-soft: oklch(0.55 0.08 240 / 0.2);
+  --inv-cream: oklch(0.2 0.04 250);
+  --inv-cream-muted: oklch(0.35 0.05 250);
+  --inv-glass: oklch(1 0 0 / 0.6);
+  --inv-glass-border: oklch(0 0 0 / 0.08);
+  --inv-glass-hover: oklch(1 0 0 / 0.8);
+  --inv-shadow: 0 8px 32px oklch(0 0 0 / 0.1);
   --inv-radius: clamp(1rem, 3vw, 1.5rem);
   --inv-radius-sm: clamp(0.625rem, 2vw, 0.875rem);
   --inv-space: clamp(1rem, 4vw, 2rem);
@@ -31,10 +31,10 @@
     max(1rem, env(safe-area-inset-bottom))
     max(1rem, env(safe-area-inset-left));
   background:
-  radial-gradient(ellipse 80% 60% at 20% 10%, oklch(0.35 0.12 300 / 0.4), transparent 60%),
-  radial-gradient(ellipse 70% 50% at 80% 90%, oklch(0.3 0.1 320 / 0.35), transparent 55%),
-  radial-gradient(ellipse 50% 40% at 50% 50%, oklch(0.25 0.06 85 / 0.08), transparent),
-  linear-gradient(165deg, var(--inv-bg-deep) 0%, var(--inv-bg-mid) 45%, oklch(0.12 0.03 280) 100%);
+  radial-gradient(ellipse 80% 60% at 20% 10%, var(--inv-lavender-soft), transparent 60%),
+  radial-gradient(ellipse 70% 50% at 80% 90%, var(--inv-accent-soft), transparent 55%),
+  radial-gradient(ellipse 50% 40% at 50% 50%, oklch(1 0 0 / 0.8), transparent),
+  linear-gradient(165deg, var(--inv-bg-deep) 0%, var(--inv-bg-mid) 45%, var(--inv-bg-deep) 100%);
   position: relative;
   overflow: hidden;
 }
@@ -187,35 +187,35 @@
 }
 
 .inv-btn--primary {
-  background: linear-gradient(135deg, oklch(0.55 0.18 310) 0%, oklch(0.5 0.16 85) 100%);
-  color: var(--inv-cream);
-  box-shadow: 0 4px 20px oklch(0.5 0.15 310 / 0.35);
+  background: linear-gradient(135deg, var(--inv-accent) 0%, var(--inv-lavender) 100%);
+  color: white;
+  box-shadow: 0 4px 20px var(--inv-accent-soft);
 }
 
 @media (hover: hover) {
   .inv-btn--primary:not(:disabled):hover {
     transform: translateY(-1px);
-    box-shadow: 0 6px 28px oklch(0.5 0.15 310 / 0.45);
+    box-shadow: 0 6px 28px var(--inv-lavender-soft);
   }
 }
 
 .inv-btn--secondary {
   background: var(--inv-glass);
-  color: var(--inv-cream-muted);
+  color: var(--inv-accent);
   border: 1px solid var(--inv-glass-border);
 }
 
 @media (hover: hover) {
   .inv-btn--secondary:not(:disabled):hover {
     background: var(--inv-glass-hover);
-    color: var(--inv-cream);
+    color: var(--inv-accent);
   }
 }
 
 .inv-btn--accent {
-  background: linear-gradient(135deg, oklch(0.65 0.14 85) 0%, oklch(0.58 0.12 75) 100%);
-  color: oklch(0.2 0.04 85);
-  box-shadow: 0 4px 20px oklch(0.6 0.12 85 / 0.3);
+  background: linear-gradient(135deg, var(--inv-lavender) 0%, var(--inv-accent) 100%);
+  color: white;
+  box-shadow: 0 4px 20px var(--inv-lavender-soft);
 }
 
 .inv-input {

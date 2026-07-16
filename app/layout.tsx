@@ -22,6 +22,11 @@ export const metadata: Metadata = {
     template: APP_TITLE_TEMPLATE,
   },
   description: APP_DESCRIPTION,
+  icons: {
+    icon: '/icon.jpg',
+    apple: '/icon.jpg',
+    shortcut: '/icon.jpg',
+  },
   alternates: {
     canonical: '/',
     languages: {
