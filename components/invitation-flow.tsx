@@ -173,21 +173,10 @@ export function InvitationFlow() {
         {/* Step 1: Details */}
         {step === 1 && (
           <>
-            <div className="inv-card__body" style={{ gap: '1rem' }}>
-              <h2 className="inv-title inv-title--gradient" style={{ fontSize: 'clamp(1.25rem, 4vw, 1.75rem)', textAlign: 'center' }}>
+            <div className="inv-card__body" style={{ gap: '0.25rem' }}>
+              <h2 className="inv-title inv-title--gradient" style={{ fontSize: 'clamp(1.25rem, 4vw, 1rem)', textAlign: 'center' }}>
                 Details of my Special Day, with you 💜
               </h2>
-
-              <div style={{ borderRadius: 'var(--inv-radius-sm)', overflow: 'hidden', border: '1px solid var(--inv-glass-border)' }}>
-                <Image
-                  src="/SE170317-1.png"
-                  alt="Graduation ceremony"
-                  width={800}
-                  height={400}
-                  style={{ width: '100%', height: 'clamp(8rem, 25vw, 14rem)', objectFit: 'cover', display: 'block' }}
-                />
-              </div>
-
               <div
                 style={{
                   background: 'oklch(1 0 0 / 0.04)',
@@ -196,6 +185,15 @@ export function InvitationFlow() {
                   padding: '0.5rem 1rem',
                 }}
               >
+              <div style={{ borderRadius: 'var(--inv-radius-sm)', overflow: 'hidden', border: '1px solid var(--inv-glass-border)' }}>
+                <Image
+                  src="/img.jpg"
+                  alt="Graduation ceremony"
+                  width={450}
+                  height={450}
+                  style={{ width: '100%', height: 'clamp(8rem, 25vw, 14rem)', objectFit: 'cover', display: 'block' }}
+                />
+              </div>
                 {EVENT_DETAILS.map((item) => (
                   <div key={item.icon} className="inv-detail-row">
                     <span className="inv-detail-icon" aria-hidden="true">{item.icon}</span>
