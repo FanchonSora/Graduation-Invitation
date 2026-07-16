@@ -83,16 +83,16 @@ export function AdminDashboard() {
 
           {!loading && !error && rsvps.length > 0 && (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem', marginTop: '1.25rem' }}>
-              <div className="admin-stat" style={{ background: 'oklch(1 0 0 / 0.1)', border: '1px solid oklch(1 0 0 / 0.15)' }}>
-                <span style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--inv-accent)' }}>{stats.total}</span>
+              <div className="admin-stat">
+                <span style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--inv-cream)' }}>{stats.total}</span>
                 <span style={{ fontSize: '0.6875rem', opacity: 0.7, marginTop: '0.25rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Total</span>
               </div>
-              <div className="admin-stat" style={{ background: 'oklch(1 0 0 / 0.1)', border: '1px solid oklch(1 0 0 / 0.15)' }}>
-                <span style={{ fontSize: '1.5rem', fontWeight: 700, color: 'oklch(0.75 0.15 145)' }}>{stats.yes}</span>
+              <div className="admin-stat">
+                <span style={{ fontSize: '1.5rem', fontWeight: 700, color: 'oklch(0.8 0.15 145)' }}>{stats.yes}</span>
                 <span style={{ fontSize: '0.6875rem', opacity: 0.7, marginTop: '0.25rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Attending</span>
               </div>
-              <div className="admin-stat" style={{ background: 'oklch(1 0 0 / 0.1)', border: '1px solid oklch(1 0 0 / 0.15)' }}>
-                <span style={{ fontSize: '1.5rem', fontWeight: 700, color: 'oklch(0.7 0.12 25)' }}>{stats.no}</span>
+              <div className="admin-stat">
+                <span style={{ fontSize: '1.5rem', fontWeight: 700, color: 'oklch(0.85 0.12 25)' }}>{stats.no}</span>
                 <span style={{ fontSize: '0.6875rem', opacity: 0.7, marginTop: '0.25rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Declined</span>
               </div>
             </div>
@@ -101,7 +101,7 @@ export function AdminDashboard() {
 
         <div style={{ padding: 'clamp(1rem, 4vw, 1.5rem)' }}>
           {loading ? (
-            <div style={{ textAlign: 'center', padding: '3rem 0', color: 'oklch(0.5 0.08 300)' }}>
+            <div style={{ textAlign: 'center', padding: '3rem 0', color: 'var(--inv-accent)' }}>
               <div className="inv-spinner" style={{ width: '2rem', height: '2rem', margin: '0 auto 1rem' }} />
               Loading RSVPs...
             </div>
@@ -110,8 +110,8 @@ export function AdminDashboard() {
               style={{
                 textAlign: 'center',
                 padding: '2rem',
-                color: 'oklch(0.5 0.15 25)',
-                background: 'oklch(0.95 0.03 25 / 0.3)',
+                color: 'oklch(0.4 0.15 25)',
+                background: 'oklch(0.95 0.05 25 / 0.3)',
                 borderRadius: 'var(--inv-radius-sm)',
                 border: '1px solid oklch(0.85 0.05 25 / 0.3)',
               }}
@@ -123,10 +123,10 @@ export function AdminDashboard() {
               style={{
                 textAlign: 'center',
                 padding: '3rem 1rem',
-                color: 'oklch(0.5 0.08 300)',
-                background: 'oklch(0.97 0.02 300 / 0.5)',
+                color: 'var(--inv-accent)',
+                background: 'var(--inv-bg-mid)',
                 borderRadius: 'var(--inv-radius-sm)',
-                border: '1px solid oklch(0.9 0.02 300 / 0.3)',
+                border: '1px solid var(--inv-glass-border)',
               }}
             >
               <span style={{ fontSize: '2rem', display: 'block', marginBottom: '0.75rem' }}>📭</span>
@@ -136,7 +136,7 @@ export function AdminDashboard() {
             <div className="admin-table-wrap">
               <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                 <thead>
-                  <tr style={{ background: 'oklch(0.96 0.02 300 / 0.6)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'oklch(0.4 0.06 300)' }}>
+                  <tr style={{ background: 'var(--inv-lavender-soft)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--inv-accent)' }}>
                     <th style={{ padding: '0.875rem 1rem', fontWeight: 600 }}>Tên</th>
                     <th style={{ padding: '0.875rem 1rem', fontWeight: 600 }}>Đi được hay không</th>
                     <th style={{ padding: '0.875rem 1rem', fontWeight: 600 }}>Ghi Chú</th>
@@ -147,11 +147,11 @@ export function AdminDashboard() {
                   {rsvps.map((rsvp) => (
                     <tr
                       key={rsvp.id}
-                      style={{ borderTop: '1px solid oklch(0.92 0.02 300 / 0.5)', transition: 'background 0.15s' }}
-                      onMouseEnter={(e) => { e.currentTarget.style.background = 'oklch(0.97 0.02 300 / 0.4)' }}
+                      style={{ borderTop: '1px solid var(--inv-glass-border)', transition: 'background 0.15s' }}
+                      onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--inv-lavender-soft)' }}
                       onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent' }}
                     >
-                      <td style={{ padding: '0.875rem 1rem', fontWeight: 500, whiteSpace: 'nowrap' }}>{rsvp.name}</td>
+                      <td style={{ padding: '0.875rem 1rem', fontWeight: 500, whiteSpace: 'nowrap', color: 'var(--inv-text)' }}>{rsvp.name}</td>
                       <td style={{ padding: '0.875rem 1rem' }}>
                         <span
                           style={{
@@ -162,17 +162,17 @@ export function AdminDashboard() {
                             borderRadius: '9999px',
                             border: '1px solid',
                             ...(rsvp.status === 'YES'
-                              ? { background: 'oklch(0.93 0.05 320)', color: 'oklch(0.45 0.15 320)', borderColor: 'oklch(0.85 0.08 320)' }
-                              : { background: 'oklch(0.93 0.04 280)', color: 'oklch(0.4 0.1 280)', borderColor: 'oklch(0.85 0.06 280)' }),
+                              ? { background: 'oklch(0.95 0.04 140)', color: 'oklch(0.4 0.12 140)', borderColor: 'oklch(0.8 0.08 140)' }
+                              : { background: 'oklch(0.95 0.04 25)', color: 'oklch(0.45 0.12 25)', borderColor: 'oklch(0.85 0.08 25)' }),
                           }}
                         >
                           {rsvp.status}
                         </span>
                       </td>
-                      <td style={{ padding: '0.875rem 1rem', minWidth: '10rem', lineHeight: 1.5, color: 'oklch(0.35 0.04 300)' }}>
+                      <td style={{ padding: '0.875rem 1rem', minWidth: '10rem', lineHeight: 1.5, color: 'var(--inv-accent)' }}>
                         {rsvp.note || '—'}
                       </td>
-                      <td style={{ padding: '0.875rem 1rem', fontSize: '0.8125rem', color: 'oklch(0.5 0.06 300)', whiteSpace: 'nowrap' }}>
+                      <td style={{ padding: '0.875rem 1rem', fontSize: '0.8125rem', color: 'var(--inv-lavender)', whiteSpace: 'nowrap' }}>
                         {new Date(rsvp.timestamp).toLocaleString()}
                       </td>
                     </tr>
