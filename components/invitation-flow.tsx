@@ -189,9 +189,9 @@ export function InvitationFlow() {
                 <Image
                   src="/img.jpg"
                   alt="Graduation ceremony"
-                  width={450}
-                  height={450}
-                  style={{ width: '100%', height: 'clamp(8rem, 25vw, 14rem)', objectFit: 'cover', display: 'block' }}
+                  width={650}
+                  height={650}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                 />
               </div>
                 {EVENT_DETAILS.map((item) => (
